@@ -1,0 +1,51 @@
+body {
+    background-color: black;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#start-game-container {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#failed-container {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#canvas {
+   background-color: lightgray;
+   display: none;
+}
+
+#start-btn {
+    background-color: rgba(160, 41, 41, 0.658);
+    color: white;
+    padding: 20px;
+    font-size: 30px;
+    margin-top: 40px;
+    border-radius: 10px; 
+}
+
+#restart-btn {
+    background-color: rgba(160, 41, 41, 0.658);
+    color: white;
+    padding: 20px;
+    font-size: 30px;
+    margin-top: 40px;
+    border-radius: 10px; 
+}
+
