@@ -5,14 +5,21 @@ class Game {
         // 1. background
         this.background1 = new Image()
         this.background2 = new Image()
+        this.failedImage = new Image ()
         this.background1.src = "../imagenes/background1.jpg"
         this.background2.src = "../imagenes/background2.png"
+        this.failedImage.src = "../imagenes/failed.png"
         // 2. Personaje 
         this.personaje1 = new Character()
-        // 3. Objetos
-        this.objetosArr = []
+        // 3. Comida
+        this.comidaArr = []
+        // 4. Obejtos
+        this.objetoArr = []
         //this.frames = 10
         this.tiempoEntreObjetos = 150
+        // gameover - falied 
+        this.gameRunning = true;
+        this.contadorVidas = 0;
         
     }
 
@@ -26,33 +33,76 @@ class Game {
 
     }
 
-    // 2. Obtencion de objetos
+    drawFailedImage = () => {
+        ctx.drawImage(this.failedImage, 10, 230, 680, 320 )
+    }
+
+    // 2. Dejando caer comida  -  objetos
 
     lanzandoComida = () => {
-        if(this.objetosArr.length === 0) {
-            let randomPosX = Math.random() * (640)
-            let randomPosX2 = Math.random() * (640)
+        if(this.comidaArr.length === 0 || this.comidaArr.length <= 2) {
+            let randomPosX = Math.random() * (640)  // intentando encontrar la falla de  por que los dos objetos(comidas) desaparecen a la vez.
+            let randomPosX2 =  Math.random() * (640)
 
             let speeds = [2, 3, 2, 4, 3]
             let randomSpeed1 = speeds[Math.floor(Math.random()*(5))]
             let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
 
-            let randomObject1 = Math.floor(Math.random() * 4)
-            let randomObject2 = Math.floor(Math.random() * 4)
+            let randomComida1 = Math.floor(Math.random() * 4)
+            let randomComida2 = Math.floor(Math.random() * 4)
 
-            let objeto1 = new Objeto (randomPosX, randomSpeed1, randomObject1)
-            this.objetosArr.push(objeto1)
+            let comida1 = new Comida (randomPosX, randomSpeed1, randomComida1)
+            this.comidaArr.push(comida1)
 
-            let objeto2 = new Objeto (randomPosX2, randomSpeed2,randomObject2)
-            this.objetosArr.push(objeto2)
+            let comida2 = new Comida (randomPosX2, randomSpeed2,randomComida2)
+            this.comidaArr.push(comida2)
 
         }
     }
+
+    lanzandoObjetos = () => {
+        if (this.objetoArr.length === 0 || this.objetoArr.length <=2) {
+           let randomPosX1 = Math.random() * 660
+           let randomPosX2 = Math.random() * 670
+
+           let speeds = [2, 3, 2, 4, 3]
+            let randomSpeed1 = speeds[Math.floor(Math.random()*(5))]
+            let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
+
+           let objeto1 = new Objeto(randomPosX1, randomSpeed1)
+           this.objetoArr.push(objeto1)
+
+           let objeto2 = new Objeto(randomPosX2, randomSpeed2)
+           this.objetoArr.push(objeto2)
+        }
+    }
+    
     // 3. quitando objetos
 
     obteniendoComida = () => {
-        this.objetosArr.forEach((cadaObjeto) => {
+        this.comidaArr.forEach((cadaComida, index) => {
            
+            if (
+                this.personaje1.x <cadaComida.x +cadaComida.w &&
+                this.personaje1.x + this.personaje1.w >cadaComida.x &&
+                this.personaje1.y <cadaComida.y +cadaComida.h &&
+                this.personaje1.h + this.personaje1.y >cadaComida.y
+              ) {
+                // Collision detected!
+               // console.log("personaje1 obtuvo comida")
+                this.comidaArr.splice(index,1)
+                
+              } 
+        })
+    } 
+
+
+    // colisionar objeto (no comida) con el personaje.
+    
+    obtenerObjetoEquivocado = () => {
+        
+        this.objetoArr.forEach((cadaObjeto, index) => {
+
             if (
                 this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
                 this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
@@ -61,23 +111,56 @@ class Game {
               ) {
                 // Collision detected!
                 console.log("personaje1 ha colisionado")
-                this.objetosArr.shift()
+                this.objetoArr.splice(index,1)
+                this.contadorVidas ++
                 // activar el fin del juego
-              } 
+              }
+            
+              
         })
-    } 
+
+        this.gameOver()
+    }
+
     quitandoComida = () => {
-        if(this.objetosArr[0].y > 670){
-            this.objetosArr.shift()
-        }
+
+        this.comidaArr.forEach((eachComida, index) =>{
+            if(eachComida.y > 670){
+                this.comidaArr.splice(index,1)
+            }
+        })
+        
     }
     
+    quitandoObjetos = () => {
+        this.objetoArr.forEach((eachObjeto, index) => {
+            if(eachObjeto.y > 670) {
+                this.objetoArr.splice(index,1)
+            }
+        })
+    }
 
     //  3. Clear Canvas  - Borrar Canvas 
     clearCanvas = () => {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
+
+    // 4. GameOver - FAILING!
+    
+    gameOver = () => {
+        if(this.contadorVidas >= 3) {
+            this.gameRunning = false
+            console.log("gameOVER!!!")
+
+            failedGameContainer.style.display = "flex"
+
+            
+        }
+
+    }
+
+    // 5. orden y funcionamiento del juego 
 
     gameLoop = () => {
         
@@ -87,13 +170,22 @@ class Game {
         this.clearCanvas()
         // 2. Movimientos - acciones del personaje y objetos.
         this.lanzandoComida()
-        this.objetosArr.forEach((eachObject) => {
-            eachObject.fallingObjects()
+        this.comidaArr.forEach((eachComida) => {
+            eachComida.fallingComida()
         })
-        this.quitandoComida()
-        this.obteniendoComida()
-      //  this.quitandoComida()
 
+        this.lanzandoObjetos ()
+        this.objetoArr.forEach((eachObjeto) => {
+            eachObjeto.fallingObjeto()
+        })
+        
+        this.obteniendoComida()
+        this.obtenerObjetoEquivocado()
+
+        this.personaje1.gravityCharacter()
+      //  this.quitandoComida()
+        this.quitandoComida()
+        this.quitandoObjetos()
         
 
         // 3. Dibujado de los elementos.
@@ -102,13 +194,20 @@ class Game {
 
         this.personaje1.drawCharacter()
 
-        this.objetosArr.forEach((eachObject) => {
-            eachObject.drawObjeto()
+        this.comidaArr.forEach((eachComida) => {
+            eachComida.drawComida()
+        })
+
+        this.objetoArr.forEach((eachObjeto) => {
+            eachObjeto.drawObjeto()
         })
         
         // 4. Recursion y control
-
+        if(this.gameRunning === true) { 
         requestAnimationFrame(this.gameLoop)
+        } else {
+            this.drawFailedImage()
+        }
         
     }
 
