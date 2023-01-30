@@ -5,9 +5,11 @@ class Game {
         // 1. background
         this.background1 = new Image()
         this.background2 = new Image()
+        this.igorImage= new Image ()
         this.failedImage = new Image ()
         this.background1.src = "../imagenes/background1.jpg"
         this.background2.src = "../imagenes/background2.png"
+        this.igorImage.src = "../imagenes/igor-juego.png"
         this.failedImage.src = "../imagenes/failed.png"
         // 2. Personaje 
         this.personaje1 = new Character()
@@ -17,9 +19,13 @@ class Game {
         this.objetoArr = []
         //this.frames = 10
         this.tiempoEntreObjetos = 150
-        // gameover - falied 
+        // 5. gameover - falied 
         this.gameRunning = true;
-        this.contadorVidas = 0;
+      //  this.contadorVidas = 0;
+
+        // 6. HungerBar
+        this.barW = 400
+        this.hunger = 0.25;
         
     }
 
@@ -29,15 +35,26 @@ class Game {
     drawBackground = () => {
 
         ctx.drawImage(this.background1, 0, 0, canvas.width, canvas.height )
-        ctx.drawImage(this.background2, 0, 300, canvas.width, 400)
+        ctx.drawImage(this.background2, 0, 600, canvas.width, 400)
 
+    }
+
+    drawIgorImage = () => {
+        ctx.drawImage(this.igorImage, 0, 0 , 200, 200)
+    }
+
+    drawHungerBar = () => {
+        ctx.fillStyle = "red"
+        ctx.fillRect(120, 80, this.barW, 40)
     }
 
     drawFailedImage = () => {
-        ctx.drawImage(this.failedImage, 10, 230, 680, 320 )
+        ctx.drawImage(this.failedImage, 10, 330, 680, 620)
     }
 
     // 2. Dejando caer comida  -  objetos
+
+    
 
     lanzandoComida = () => {
         if(this.comidaArr.length === 0 || this.comidaArr.length <= 2) {
@@ -76,6 +93,13 @@ class Game {
            this.objetoArr.push(objeto2)
         }
     }
+            // 2.3 Barra de hambre disminuye o aumenta segun el objeto atrapado.
+
+    hungerBar = () => {
+        if(this.barW >= 0) { 
+        this.barW -= this.hunger
+        } 
+    }
     
     // 3. quitando objetos
 
@@ -91,6 +115,7 @@ class Game {
                 // Collision detected!
                // console.log("personaje1 obtuvo comida")
                 this.comidaArr.splice(index,1)
+                this.barW += 40
                 
               } 
         })
@@ -113,6 +138,7 @@ class Game {
                 console.log("personaje1 ha colisionado")
                 this.objetoArr.splice(index,1)
                 this.contadorVidas ++
+                this.barW -= 20
                 // activar el fin del juego
               }
             
@@ -125,7 +151,7 @@ class Game {
     quitandoComida = () => {
 
         this.comidaArr.forEach((eachComida, index) =>{
-            if(eachComida.y > 670){
+            if(eachComida.y > 970){
                 this.comidaArr.splice(index,1)
             }
         })
@@ -134,7 +160,7 @@ class Game {
     
     quitandoObjetos = () => {
         this.objetoArr.forEach((eachObjeto, index) => {
-            if(eachObjeto.y > 670) {
+            if(eachObjeto.y > 970) {
                 this.objetoArr.splice(index,1)
             }
         })
@@ -149,7 +175,7 @@ class Game {
     // 4. GameOver - FAILING!
     
     gameOver = () => {
-        if(this.contadorVidas >= 3) {
+        if(this.barW <= 0) {
             this.gameRunning = false
             console.log("gameOVER!!!")
 
@@ -183,6 +209,7 @@ class Game {
         this.obtenerObjetoEquivocado()
 
         this.personaje1.gravityCharacter()
+        this.hungerBar()
       //  this.quitandoComida()
         this.quitandoComida()
         this.quitandoObjetos()
@@ -191,6 +218,7 @@ class Game {
         // 3. Dibujado de los elementos.
 
         this.drawBackground()
+        
 
         this.personaje1.drawCharacter()
 
@@ -201,6 +229,8 @@ class Game {
         this.objetoArr.forEach((eachObjeto) => {
             eachObjeto.drawObjeto()
         })
+        this.drawHungerBar()
+        this.drawIgorImage()
         
         // 4. Recursion y control
         if(this.gameRunning === true) { 

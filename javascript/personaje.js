@@ -4,7 +4,7 @@ class Character {
 
     constructor () {
         this.x = 330
-        this.y = 625 // 600 base
+        this.y = 925 // 600 base
         this.h = 70
         this.w = 50
         this.character = new Image()
@@ -35,7 +35,7 @@ class Character {
     }
 
     jumpCharacter = () => {
-        if(this.y + this.h <= 695 && this.y > 620) {
+        if(this.y + this.h <= 995 && this.y > 920) {
             this.y -= 50
             this.x += 40
             console.log("saltando")
@@ -45,11 +45,11 @@ class Character {
     }
 
     gravityCharacter = () => {
-        if(this.y + this.h < 695){
+        if(this.y + this.h < 995){
             this.y += this.gravity
         }
     }
 
-    
+
 }
 
