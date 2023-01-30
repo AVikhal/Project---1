@@ -10,7 +10,7 @@ class Character {
         this.character = new Image()
         this.character.src = "../imagenes/personaje1.png"
         this.moveSpeed = 12;
-        this.gravity = 0.5
+        this.gravity = 3
 
     }
 
@@ -26,26 +26,41 @@ class Character {
         // 2. movimiento del personaje.
     
     moveCharacter = (direction) => {
-       if (direction === "left" ) {
+       if (direction === "left" && this.x > 0) {
          this.x -= this.moveSpeed
-        } else if (direction === "right"){
+        } else if (direction === "right" && this.x + this.w < canvas.width){
             this.x += this.moveSpeed
         }
 
     }
 
-    jumpCharacter = () => {
-        if(this.y + this.h <= 995 && this.y > 920) {
-            this.y -= 50
-            this.x += 40
+    jumpCharacterRight = () => {
+        if(this.y + this.h <= 997 && this.y > 920 && this.x + this.w <= canvas.width - 200) {
+            this.y -= 200
+            this.x += 200
             console.log("saltando")
         
+        } else if (this.y + this.h <= 997 && this.y > 920 && canvas.width - (this.x + this.w) < 200){
+            this.y -= 200
+            this.x = canvas.width - this.w
         }
         
     }
 
+    // Salto a la izquierda
+
+    jumpCharacterLeft = () => {
+        if(this.y + this.h <= 997 && this.y > 920 && this.x >= 200){
+            this.y -= 200
+            this.x -= 200
+        } else if(this.y + this.h <= 997 && this.y > 920 && this.x <200){
+            this.y -= 200
+            this.x = 0;
+        }
+    }
+
     gravityCharacter = () => {
-        if(this.y + this.h < 995){
+        if(this.y + this.h <= 994){
             this.y += this.gravity
         }
     }

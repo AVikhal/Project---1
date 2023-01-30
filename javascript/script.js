@@ -30,8 +30,10 @@ let moveChar = (event) => {
        games.personaje1.moveCharacter("left") 
     } else if(event.code === "ArrowRight"){
         games.personaje1.moveCharacter("right")
-    } else if (event.code === "ArrowUp"){
-        games.personaje1.jumpCharacter()
+    } else if (event.code === "KeyD"){
+        games.personaje1.jumpCharacterRight()
+    } else if (event.code === "KeyA"){
+        games.personaje1.jumpCharacterLeft()
     }
 
 }

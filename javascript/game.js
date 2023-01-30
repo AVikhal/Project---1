@@ -25,7 +25,7 @@ class Game {
 
         // 6. HungerBar
         this.barW = 400
-        this.hunger = 0.25;
+        this.hunger = 0.225;
         
     }
 
