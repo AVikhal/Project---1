@@ -25,12 +25,16 @@ class Game {
 
         // 6. HungerBar
         this.barW = 400
-        this.hunger = 0.225;
+        this.hunger = 0.1
+
         
+       
     }
+    
 
     // Metodos - Funcionalidad del juego
-
+    
+   
     // 1.Background - Iamgenes de fondo.
     drawBackground = () => {
 
@@ -110,14 +114,19 @@ class Game {
                 this.personaje1.x <cadaComida.x +cadaComida.w &&
                 this.personaje1.x + this.personaje1.w >cadaComida.x &&
                 this.personaje1.y <cadaComida.y +cadaComida.h &&
-                this.personaje1.h + this.personaje1.y >cadaComida.y
+                this.personaje1.h + this.personaje1.y >cadaComida.y && this.barW <400
               ) {
                 // Collision detected!
                // console.log("personaje1 obtuvo comida")
-                this.comidaArr.splice(index,1)
-                this.barW += 40
-                
-              } 
+                this.comidaArr.splice(index,1) 
+                this.barW += 40  
+              } else if(this.personaje1.x <cadaComida.x +cadaComida.w &&
+                this.personaje1.x + this.personaje1.w >cadaComida.x &&
+                this.personaje1.y <cadaComida.y +cadaComida.h &&
+                this.personaje1.h + this.personaje1.y >cadaComida.y){
+
+                    this.comidaArr.splice(index,1)
+                }
         })
     } 
 
@@ -138,7 +147,7 @@ class Game {
                 console.log("personaje1 ha colisionado")
                 this.objetoArr.splice(index,1)
                 this.contadorVidas ++
-                this.barW -= 20
+                this.barW -= 40
                 // activar el fin del juego
               }
             
@@ -210,6 +219,9 @@ class Game {
 
         this.personaje1.gravityCharacter()
         this.hungerBar()
+        
+        
+
       //  this.quitandoComida()
         this.quitandoComida()
         this.quitandoObjetos()

@@ -11,7 +11,8 @@ class Character {
         this.character.src = "../imagenes/personaje1.png"
         this.moveSpeed = 12;
         this.gravity = 3
-
+        
+        
     }
 
 
@@ -33,8 +34,13 @@ class Character {
         }
 
     }
+    executeMove = () => {
+        this.controller.forEach(key=>{
+            key.pressed && key.func
+        }) 
+    }
 
-    jumpCharacterRight = () => {
+   jumpCharacterRight = () => {
         if(this.y + this.h <= 997 && this.y > 920 && this.x + this.w <= canvas.width - 200) {
             this.y -= 200
             this.x += 200
@@ -57,7 +63,15 @@ class Character {
             this.y -= 200
             this.x = 0;
         }
+    } 
+
+    jumpCharacter = () => {
+        if(this.y + this.h <=997 && this.y > 920){
+            this.y -= 200
+        }
     }
+
+    
 
     gravityCharacter = () => {
         if(this.y + this.h <= 994){
