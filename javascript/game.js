@@ -22,10 +22,13 @@ class Game {
         // 5. gameover - falied 
         this.gameRunning = true;
       //  this.contadorVidas = 0;
+        this.contador = 0
+        this.hammerHit = false;
 
         // 6. HungerBar
         this.barW = 400
-        this.hunger = 0.1
+        this.hunger = 0.2
+
 
         
        
@@ -33,6 +36,18 @@ class Game {
     
 
     // Metodos - Funcionalidad del juego
+
+    // HAMMERR operation 
+
+    hammerHitTimer = () => {
+        if(this.hammerHit === true && this.personaje1.character.src === this.personaje1.charArr[1]) { 
+         } setTimeout(() => {
+            
+                this.hammerHit = false
+                this.personaje1.character.src = this.personaje1.charArr[0]
+            
+        }, 1000)
+    }
     
    
     // 1.Background - Iamgenes de fondo.
@@ -90,12 +105,34 @@ class Game {
             let randomSpeed1 = speeds[Math.floor(Math.random()*(5))]
             let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
 
-           let objeto1 = new Objeto(randomPosX1, randomSpeed1)
+           let objeto1 = new Objeto(randomPosX1, randomSpeed1, 0)
            this.objetoArr.push(objeto1)
 
-           let objeto2 = new Objeto(randomPosX2, randomSpeed2)
+           let objeto2 = new Objeto(randomPosX2, randomSpeed2, 0)
            this.objetoArr.push(objeto2)
+
+        } else if(this.contador >= 10){
+            if(this.objetoArr.length === 0 || this.objetoArr.length <=3){
+            
+            let randomPosX1 = Math.random() * 660
+            let randomPosX2 = Math.random() * 670
+            let randomPosX3 = Math.random() * 680
+
+            let speeds = [2, 3, 2, 4, 3]
+            let randomSpeed1 = speeds[Math.floor(Math.random()*(5))]
+            let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
+            let randomSpeed3 = speeds[Math.floor(Math.random()*(5))]
+
+           let objeto1 = new Objeto(randomPosX1, randomSpeed1, 1)
+           this.objetoArr.push(objeto1)
+
+           let objeto2 = new Objeto(randomPosX2, randomSpeed2, 1)
+           this.objetoArr.push(objeto2)
+           
+           let objeto3 = new Objeto(randomPosX3, randomSpeed3, 1)
+           this.objetoArr.push(objeto3)
         }
+    }
     }
             // 2.3 Barra de hambre disminuye o aumenta segun el objeto atrapado.
 
@@ -119,7 +156,8 @@ class Game {
                 // Collision detected!
                // console.log("personaje1 obtuvo comida")
                 this.comidaArr.splice(index,1) 
-                this.barW += 40  
+                this.barW += 40
+                this.contador ++  
               } else if(this.personaje1.x <cadaComida.x +cadaComida.w &&
                 this.personaje1.x + this.personaje1.w >cadaComida.x &&
                 this.personaje1.y <cadaComida.y +cadaComida.h &&
@@ -137,7 +175,19 @@ class Game {
         
         this.objetoArr.forEach((cadaObjeto, index) => {
 
-            if (
+            if((this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
+                this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
+                this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
+                this.personaje1.h + this.personaje1.y >cadaObjeto.y) && this.contador >= 10)
+                { 
+                    this.objetoArr.splice(index,1)
+                    console.log("lalalalallala")
+                    this.personaje1.character.src = this.personaje1.charArr[1]
+                    this.hammerHit = true;
+                    this.hammerHitTimer()
+
+                }
+                else if (
                 this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
                 this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
                 this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
@@ -147,9 +197,9 @@ class Game {
                 console.log("personaje1 ha colisionado")
                 this.objetoArr.splice(index,1)
                 this.contadorVidas ++
-                this.barW -= 40
+                this.barW -= 40}
                 // activar el fin del juego
-              }
+                 
             
               
         })

@@ -25,14 +25,14 @@ let gaming = () => {
 }
 
 let moveChar = (event) => {
-    if(event.code === "ArrowLeft") {
+    if(event.code === "ArrowLeft" && games.hammerHit === false) {
         console.log ("moviendome a la izquierda")
        games.personaje1.moveCharacter("left") 
-    } else if(event.code === "ArrowRight"){
+    } else if(event.code === "ArrowRight" && games.hammerHit === false){
         games.personaje1.moveCharacter("right")
-    } else if (event.code === "KeyD"){
+    } else if (event.code === "KeyD" && games.hammerHit === false){
         games.personaje1.jumpCharacterRight()
-    } else if (event.code === "KeyA"){
+    } else if (event.code === "KeyA" && games.hammerHit === false){
         games.personaje1.jumpCharacterLeft()
     }
 
@@ -59,16 +59,3 @@ btnReStart.addEventListener("click", newGame)
 window.addEventListener("keydown", moveChar)
 //dibujarImagen()
 
-/* window.addEventListener("keydown", (event) =>{
-    if(event.code === "ArrowRight") {
-        games.personaje1.controller.derecha.pressed = true
-        console.log("lalala")
-    }
-})
-window.addEventListener("keyup", (event) => {
-    if(event.code === "ArrowRight") {
-        games.personaje1.controller.derecha.pressed = false
-        console.log("lololo")
-    }
-
-}) */
