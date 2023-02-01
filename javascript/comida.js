@@ -10,7 +10,7 @@ class Comida {
         this.h = 60
         this.speed = speed
         this.image = new Image()
-        this.imageArr = ["/imagenes/baghette.png", "/imagenes/carrot.png", "/imagenes/gallina.png", "/imagenes/Sandwich.png"]
+        this.imageArr = ["./imagenes/baghette.png", "./imagenes/carrot.png", "./imagenes/gallina.png", "./imagenes/Sandwich.png"]
         this.image.src = this.imageArr[imagen]
 
     }

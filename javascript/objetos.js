@@ -7,7 +7,7 @@ class Objeto {
         this.w = 40
         this.h = 40
         this.image = new Image ()
-        this.objetosArr = ["/imagenes/skull.png", "/imagenes/martillo.png"]
+        this.objetosArr = ["./imagenes/skull.png", "./imagenes/martillo.png"]
         this.image.src = this.objetosArr[objetoX]
         this.speed = speed
     
