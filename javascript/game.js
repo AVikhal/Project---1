@@ -6,6 +6,10 @@ class Game {
         this.background1 = new Image()
         this.background2 = new Image()
         this.igorImage= new Image ()
+        this.igorX = 0
+        this.igorY =0
+        this.igorW = 200
+        this.igorH =200
         this.failedImage = new Image ()
         this.background1.src = "./imagenes/background1.jpg"
         this.background2.src = "./imagenes/background2.png"
@@ -17,6 +21,7 @@ class Game {
         this.comidaArr = []
         // 4. Obejtos
         this.objetoArr = []
+        this.hammerArr = []
         //this.frames = 10
         this.tiempoEntreObjetos = 150
         // 5. gameover - falied 
@@ -28,6 +33,8 @@ class Game {
         // 6. HungerBar
         this.barW = 400
         this.hunger = 0.2
+        // 7. Score
+        this.scoreArr = []
 
 
         
@@ -97,7 +104,7 @@ class Game {
     }
 
     lanzandoObjetos = () => {
-        if (this.objetoArr.length === 0 || this.objetoArr.length <=2) {
+        if ((this.objetoArr.length === 0 || this.objetoArr.length <=3) && this.contador <=10) {
            let randomPosX1 = Math.random() * 660
            let randomPosX2 = Math.random() * 670
 
@@ -111,8 +118,8 @@ class Game {
            let objeto2 = new Objeto(randomPosX2, randomSpeed2, 0)
            this.objetoArr.push(objeto2)
 
-        } else if(this.contador >= 10){
-            if(this.objetoArr.length === 0 || this.objetoArr.length <=3){
+        } else if(this.contador > 10 && (this.hammerArr.length ===0 || this.hammerArr.length<=3)){
+            
             
             let randomPosX1 = Math.random() * 660
             let randomPosX2 = Math.random() * 670
@@ -123,17 +130,17 @@ class Game {
             let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
             let randomSpeed3 = speeds[Math.floor(Math.random()*(5))]
 
-           let objeto1 = new Objeto(randomPosX1, randomSpeed1, 1)
-           this.objetoArr.push(objeto1)
+           let hammer1 = new Objeto(randomPosX1, randomSpeed1, 1)
+           this.hammerArr.push(hammer1)
 
-           let objeto2 = new Objeto(randomPosX2, randomSpeed2, 1)
-           this.objetoArr.push(objeto2)
+           let hammer2 = new Objeto(randomPosX2, randomSpeed2, 1)
+           this.hammerArr.push(hammer2)
            
-           let objeto3 = new Objeto(randomPosX3, randomSpeed3, 1)
-           this.objetoArr.push(objeto3)
+           let hammer3 = new Objeto(randomPosX3, randomSpeed3, 1)
+           this.hammerArr.push(hammer3)
         }
     }
-    }
+    
             // 2.3 Barra de hambre disminuye o aumenta segun el objeto atrapado.
 
     hungerBar = () => {
@@ -156,8 +163,10 @@ class Game {
                 // Collision detected!
                // console.log("personaje1 obtuvo comida")
                 this.comidaArr.splice(index,1) 
-                this.barW += 40
-                this.contador ++  
+                
+                this.contador ++
+                this.score1 = new Score(this.personaje1.x, this.personaje1.y, 0)
+                this.scoreArr.push(this.score1)  
               } else if(this.personaje1.x <cadaComida.x +cadaComida.w &&
                 this.personaje1.x + this.personaje1.w >cadaComida.x &&
                 this.personaje1.y <cadaComida.y +cadaComida.h &&
@@ -175,36 +184,66 @@ class Game {
         
         this.objetoArr.forEach((cadaObjeto, index) => {
 
-            if((this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
+           /* if((this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
                 this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
                 this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
                 this.personaje1.h + this.personaje1.y >cadaObjeto.y) && this.contador >= 10)
                 { 
-                    this.objetoArr.splice(index,1)
-                    console.log("lalalalallala")
-                    this.personaje1.character.src = this.personaje1.charArr[1]
-                    this.hammerHit = true;
-                    this.hammerHitTimer()
+                   // this.objetoArr.splice(index,1)
+                   // this.personaje1.character.src = this.personaje1.charArr[1]
+                  //  this.hammerHit = true;
+                   // this.hammerHitTimer()
 
                 }
-                else if (
+                else */if (
                 this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
                 this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
                 this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
-                this.personaje1.h + this.personaje1.y >cadaObjeto.y
+                this.personaje1.h + this.personaje1.y >cadaObjeto.y 
               ) {
                 // Collision detected!
-                console.log("personaje1 ha colisionado")
+            
                 this.objetoArr.splice(index,1)
-        
-                this.barW -= 40}
+                this.barW -= 40
+                this.score2 = new Score(this.personaje1.x, this.personaje1.y, 1)
+                this.scoreArr.push(this.score2)
                 // activar el fin del juego
-                 
+              }  
             
               
         })
 
         this.gameOver()
+    }
+
+    hammerHit = () => {
+        this.hammerArr.forEach((cadaHammer) => {
+            if((this.personaje1.x <cadaHammer.x +cadaHammer.w &&
+                this.personaje1.x + this.personaje1.w >cadaHammer.x &&
+                this.personaje1.y <cadaHammer.y +cadaHammer.h &&
+                this.personaje1.h + this.personaje1.y >cadaHammer.y) && this.contador >= 10)
+                { 
+                   this.hammerArr.splice(index,1)
+                   this.personaje1.character.src = this.personaje1.charArr[1]
+                   this.hammerHit = true;
+                   this.hammerHitTimer()
+
+                }
+        })
+    }
+
+    quitandoScore = () => {
+        this.scoreArr.forEach((cadaScore, index)=>{
+            if(this.igorX <cadaScore.x +cadaScore.w &&
+               this.igorX + this.igorW >cadaScore.x &&
+               this.igorY <cadaScore.y +cadaScore.h &&
+               this.igorH + this.igorY >cadaScore.y){
+
+                    this.scoreArr.splice(index,1)
+                    this.barW += 40
+               } 
+
+        })
     }
 
     quitandoComida = () => {
@@ -223,6 +262,13 @@ class Game {
                 this.objetoArr.splice(index,1)
             }
         })
+        this.hammerArr.forEach((eachHammer, index) => {
+            if(eachHammer.y > 970) {
+                this.hammerArr.splice(index,1)
+            }
+        })
+
+
     }
 
     //  3. Clear Canvas  - Borrar Canvas 
@@ -263,18 +309,26 @@ class Game {
         this.objetoArr.forEach((eachObjeto) => {
             eachObjeto.fallingObjeto()
         })
+        this.hammerArr.forEach((eachHammer) => {
+            eachHammer.fallingObjeto()
+        })
         
         this.obteniendoComida()
         this.obtenerObjetoEquivocado()
 
         this.personaje1.gravityCharacter()
         this.hungerBar()
-        
+        this.scoreArr.forEach((eachScore) =>{
+            if(eachScore.x > 40 || eachScore.y + eachScore.h > 40){ 
+            eachScore.scoreMotion()
+            }
+        })
         
 
       //  this.quitandoComida()
         this.quitandoComida()
         this.quitandoObjetos()
+        this.quitandoScore()
         
 
         // 3. Dibujado de los elementos.
@@ -291,8 +345,18 @@ class Game {
         this.objetoArr.forEach((eachObjeto) => {
             eachObjeto.drawObjeto()
         })
+        //agregando funcion para dibujar solo martillos (hammers)
+        this.hammerArr.forEach((eachHammer)=>{
+            eachHammer.drawObjeto()
+        })
+
         this.drawHungerBar()
         this.drawIgorImage()
+
+        this.scoreArr.forEach((eachScore)=> {
+            eachScore.drawScore()
+        })
+        
         
         // 4. Recursion y control
         if(this.gameRunning === true) { 
