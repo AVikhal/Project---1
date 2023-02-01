@@ -8,7 +8,7 @@ class Character {
         this.h = 70
         this.w = 50
         this.character = new Image()
-        this.charArr = ["../imagenes/personaje1.png", "../imagenes/personaje1-flat.png"]
+        this.charArr = ["/imagenes/personaje1.png", "/imagenes/personaje1-flat.png"]
         this.character.src = this.charArr[0]
         this.moveSpeed = 12;
         this.gravity = 3

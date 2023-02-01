@@ -7,10 +7,10 @@ class Game {
         this.background2 = new Image()
         this.igorImage= new Image ()
         this.failedImage = new Image ()
-        this.background1.src = "../imagenes/background1.jpg"
-        this.background2.src = "../imagenes/background2.png"
-        this.igorImage.src = "../imagenes/igor-juego.png"
-        this.failedImage.src = "../imagenes/failed.png"
+        this.background1.src = "/imagenes/background1.jpg"
+        this.background2.src = "/imagenes/background2.png"
+        this.igorImage.src = "/imagenes/igor-juego.png"
+        this.failedImage.src = "/imagenes/failed.png"
         // 2. Personaje 
         this.personaje1 = new Character()
         // 3. Comida
@@ -196,7 +196,7 @@ class Game {
                 // Collision detected!
                 console.log("personaje1 ha colisionado")
                 this.objetoArr.splice(index,1)
-                this.contadorVidas ++
+        
                 this.barW -= 40}
                 // activar el fin del juego
                  
