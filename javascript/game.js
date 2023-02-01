@@ -32,7 +32,7 @@ class Game {
 
         // 6. HungerBar
         this.barW = 400
-        this.hunger = 0.2
+        this.hunger = 0.1
         // 7. Score
         this.scoreArr = []
 
@@ -83,7 +83,7 @@ class Game {
     
 
     lanzandoComida = () => {
-        if(this.comidaArr.length === 0 || this.comidaArr.length <= 2) {
+        if(this.comidaArr.length === 0 ) {
             let randomPosX = Math.random() * (640)  // intentando encontrar la falla de  por que los dos objetos(comidas) desaparecen a la vez.
             let randomPosX2 =  Math.random() * (640)
 
@@ -104,11 +104,11 @@ class Game {
     }
 
     lanzandoObjetos = () => {
-        if ((this.objetoArr.length === 0 || this.objetoArr.length <=3) && this.contador <=10) {
+        if (this.objetoArr.length === 0 && this.contador <=10) {
            let randomPosX1 = Math.random() * 660
            let randomPosX2 = Math.random() * 670
 
-           let speeds = [2, 3, 2, 4, 3]
+           let speeds = [1, 2, 1, 3, 2]
             let randomSpeed1 = speeds[Math.floor(Math.random()*(5))]
             let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
 
@@ -118,14 +118,14 @@ class Game {
            let objeto2 = new Objeto(randomPosX2, randomSpeed2, 0)
            this.objetoArr.push(objeto2)
 
-        } else if(this.contador > 10 && (this.hammerArr.length ===0 || this.hammerArr.length<=3)){
+        } else if(this.contador > 10 && this.hammerArr.length ===0 ){
             
             
             let randomPosX1 = Math.random() * 660
             let randomPosX2 = Math.random() * 670
             let randomPosX3 = Math.random() * 680
 
-            let speeds = [2, 3, 2, 4, 3]
+            let speeds = [1, 2, 1, 3, 2]
             let randomSpeed1 = speeds[Math.floor(Math.random()*(5))]
             let randomSpeed2 = speeds[Math.floor(Math.random()*(5))]
             let randomSpeed3 = speeds[Math.floor(Math.random()*(5))]
@@ -184,18 +184,7 @@ class Game {
         
         this.objetoArr.forEach((cadaObjeto, index) => {
 
-           /* if((this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
-                this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
-                this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
-                this.personaje1.h + this.personaje1.y >cadaObjeto.y) && this.contador >= 10)
-                { 
-                   // this.objetoArr.splice(index,1)
-                   // this.personaje1.character.src = this.personaje1.charArr[1]
-                  //  this.hammerHit = true;
-                   // this.hammerHitTimer()
-
-                }
-                else */if (
+           if (
                 this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
                 this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
                 this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
@@ -216,12 +205,12 @@ class Game {
         this.gameOver()
     }
 
-    hammerHit = () => {
-        this.hammerArr.forEach((cadaHammer) => {
-            if((this.personaje1.x <cadaHammer.x +cadaHammer.w &&
-                this.personaje1.x + this.personaje1.w >cadaHammer.x &&
-                this.personaje1.y <cadaHammer.y +cadaHammer.h &&
-                this.personaje1.h + this.personaje1.y >cadaHammer.y) && this.contador >= 10)
+    hammerHitting = () => {
+        this.hammerArr.forEach((cadaHammer, index) => {
+            if((cadaHammer.x <this.personaje1.x +this.personaje1.w &&
+                cadaHammer.x + cadaHammer.w >this.personaje1.x &&
+                cadaHammer.y <this.personaje1.y +this.personaje1.h &&
+                cadaHammer.h + cadaHammer.y >this.personaje1.y))
                 { 
                    this.hammerArr.splice(index,1)
                    this.personaje1.character.src = this.personaje1.charArr[1]
@@ -258,12 +247,12 @@ class Game {
     
     quitandoObjetos = () => {
         this.objetoArr.forEach((eachObjeto, index) => {
-            if(eachObjeto.y > 970) {
+            if(eachObjeto.y >= 970) {
                 this.objetoArr.splice(index,1)
             }
         })
         this.hammerArr.forEach((eachHammer, index) => {
-            if(eachHammer.y > 970) {
+            if(eachHammer.y >= 970) {
                 this.hammerArr.splice(index,1)
             }
         })
@@ -315,6 +304,7 @@ class Game {
         
         this.obteniendoComida()
         this.obtenerObjetoEquivocado()
+        this.hammerHitting()
 
         this.personaje1.gravityCharacter()
         this.hungerBar()
