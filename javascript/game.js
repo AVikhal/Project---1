@@ -6,6 +6,8 @@ class Game {
         this.background1 = new Image()
         this.background2 = new Image()
         this.igorImage= new Image ()
+        
+
         this.igorX = 0
         this.igorY =0
         this.igorW = 200
@@ -42,8 +44,10 @@ class Game {
         //  Activador lvls 1
 
         this.hammersNow = false;
-
-
+        // teleport 
+        
+        this.humo = false
+        this.teleArr = []
 
         
        
@@ -384,7 +388,23 @@ class Game {
         this.drawBackground()
         
 
+       // this.personaje1.drawCharacter()
+        if(this.humo === true){
+            this.teleArr.forEach((elem) =>{
+                elem.x = this.personaje1.x -20
+                elem.y = this.personaje1.y +50
+                elem.w = 100
+                elem.h = 30
+                elem.drawTeleport()
+            })
+        }
+        if(this.personaje1.y >= 920 && this.hammerHit === false){
+            this.personaje1.character.src=this.personaje1.charArr[0]
+
         this.personaje1.drawCharacter()
+        } else {
+            this.personaje1.drawCharacter()
+        }
 
         this.comidaArr.forEach((eachComida) => {
             eachComida.drawComida()

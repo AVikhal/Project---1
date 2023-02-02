@@ -31,11 +31,26 @@ let moveChar = (event) => {
     } else if(event.code === "ArrowRight" && games.hammerHit === false){
         games.personaje1.moveCharacter("right")
     } else if (event.code === "KeyD" && games.hammerHit === false){
+        
         games.personaje1.jumpCharacterRight()
+        games.personaje1.character.src = games.personaje1.charArr[2]
+        games.humo = true;
+        games.teleport1 = new Character ()
+        games.teleArr.push(games.teleport1)
+       setTimeout(()=>{
+        games.humo = false;
+       }, 500)
+
     } else if (event.code === "KeyA" && games.hammerHit === false){
         games.personaje1.jumpCharacterLeft()
+        games.personaje1.character.src = games.personaje1.charArr[2]
+        games.humo = true;
+        games.teleport1 = new Character ()
+        games.teleArr.push(games.teleport1)
+       setTimeout(()=>{
+        games.humo = false;
+       }, 500)
     }
-
 }
 
 let newGame = () => {

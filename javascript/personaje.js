@@ -8,11 +8,12 @@ class Character {
         this.h = 70
         this.w = 50
         this.character = new Image()
-        this.charArr = ["./imagenes/personaje1.png", "./imagenes/personaje1-flat.png"]
+        this.charArr = ["./imagenes/personaje1.png", "./imagenes/personaje1-flat.png", "./imagenes/personaje1-jump.png", "./imagenes/teleport-b.png"]
         this.character.src = this.charArr[0]
         this.moveSpeed = 12;
-        this.gravity = 3
-        
+        this.gravity = 2
+        this.teleport = new Image()
+        this.teleport.src = this.charArr[3]
         
     }
 
@@ -20,9 +21,16 @@ class Character {
     // Metodos del personaje - Character
 
         // 1. Dibujar al Personaje
+    drawTeleport = () =>{
+        ctx.drawImage(this.teleport, this.x, this.y, this.w, this.h)
+        console.log("lalalalalla")
+    }
     
     drawCharacter = () => {
-        ctx.drawImage(this.character, this.x, this.y, this.w, this.h)
+       
+        
+            ctx.drawImage(this.character, this.x, this.y, this.w, this.h)
+     
     }
 
         // 2. movimiento del personaje.
@@ -39,6 +47,9 @@ class Character {
 
    jumpCharacterRight = () => {
         if(this.y + this.h <= 997 && this.y > 920 && this.x + this.w <= canvas.width - 200) {
+            
+           
+
             this.y -= 200
             this.x += 200
             console.log("saltando")
