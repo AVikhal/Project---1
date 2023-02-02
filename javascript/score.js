@@ -5,7 +5,7 @@ class Score {
         this.y = posY
         this.w = 30
         this.h = 20
-        this.animationSpeed = 3
+        this.animationSpeed = 2
         this.image = new Image ()
         this.scoreArr = ["./imagenes/40positivo.png", "./imagenes/20negativo.png", "./imagenes/2sec.png"]
         this.image.src = this.scoreArr[number]
@@ -17,7 +17,7 @@ class Score {
 
     drawScore = () => {
         ctx.drawImage(this.image, this.x, this.y, this.w, this.h)
-        if(this.w < 120 && this.h > -150){ 
+        if(this.w < 140 && this.h > -170){ 
         this.scoreAnimation()
     
         }
