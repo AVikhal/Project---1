@@ -12,7 +12,7 @@ class Comida {
         this.image = new Image()
         this.imageArr = ["./imagenes/baghette.png", "./imagenes/carrot.png", "./imagenes/gallina.png", "./imagenes/Sandwich.png"]
         this.image.src = this.imageArr[imagen]
-
+        
     }
 
     // Metodos - funcionalidades de objetos.
@@ -37,6 +37,8 @@ class Comida {
         this.x0 -= 5   
         } else if (this.y >= 200){
         this.y += this.speed
-        }     
+        }
     }
 }
+
+

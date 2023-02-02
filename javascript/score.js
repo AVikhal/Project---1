@@ -1,6 +1,6 @@
 class Score {
     // propiedades de la puntuacion
-    constructor (posX, posY, number ) {
+    constructor (posX, posY, number, value ) {
         this.x = posX
         this.y = posY
         this.w = 30
@@ -9,6 +9,7 @@ class Score {
         this.image = new Image ()
         this.scoreArr = ["./imagenes/40positivo.png", "./imagenes/20negativo.png", "./imagenes/2sec.png"]
         this.image.src = this.scoreArr[number]
+        this.value = value
     }
 
     // 2. metodos y funcionalidad de los scores
@@ -17,7 +18,7 @@ class Score {
 
     drawScore = () => {
         ctx.drawImage(this.image, this.x, this.y, this.w, this.h)
-        if(this.w < 140 && this.h > -170){ 
+        if(this.w <= 150 && this.h >= -180){ 
         this.scoreAnimation()
     
         }
@@ -29,18 +30,14 @@ class Score {
         
         this.w += this.animationSpeed
         this.h -= this.animationSpeed
-        if(this.W >=119 && this.h <= -149){
-        this.w -= this.animationSpeed
-        this.h += this.animationSpeed
-        }
-
+        
     }
 
     scoreMotion = () => {
         if (this.x >40 ){
             this.x -=5
             this.y -=5
-        } else if( this.x && this.y + this.h >60){
+        } else if( this.x >=0 && this.y + this.h >60){
             this.y -=5
             
         }

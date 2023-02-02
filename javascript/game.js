@@ -22,7 +22,8 @@ class Game {
         // 4. Obejtos
         this.objetoArr = []
         this.hammerArr = []
-        //this.frames = 10
+        // .... Frames
+        this.frames = 0
         this.tiempoEntreObjetos = 150
         // 5. gameover - falied 
         this.gameRunning = true;
@@ -32,9 +33,16 @@ class Game {
 
         // 6. HungerBar
         this.barW = 400
+        this.spawnHammersKulls = 0
+        this.spawnFood = 0
         this.hunger = 0.1
         // 7. Score
         this.scoreArr = []
+        this.stunnedArr = []
+        //  Activador lvls 1
+
+        this.hammersNow = false;
+
 
 
         
@@ -44,7 +52,36 @@ class Game {
 
     // Metodos - Funcionalidad del juego
 
+    contadorFrames = () => {
+
+        if(this.frames%21600 ===0){
+            this.spawnHammersKulls ++
+            this.contador ++
+            this.hunger += 0.05
+            
+        }
+        if (this.frames%900 === 0){
+            this.contador ++
+        } 
+
+        if(this.frames%30000===0){
+            this.spawnFood ++
+            
+        }     
+
+    }
+
+    
+
     // HAMMERR operation 
+    hammersFrenzyNow = () => {
+        if(this.contador >= 6 && this.contador%6 === 0){
+            this.hammersNow = true
+            
+        } else {
+            this.hammersNow = false
+        }
+    } 
 
     hammerHitTimer = () => {
         if(this.hammerHit === true && this.personaje1.character.src === this.personaje1.charArr[1]) { 
@@ -72,18 +109,24 @@ class Game {
     drawHungerBar = () => {
         ctx.fillStyle = "red"
         ctx.fillRect(120, 80, this.barW, 40)
+    
     }
 
     drawFailedImage = () => {
         ctx.drawImage(this.failedImage, 10, 330, 680, 620)
     }
 
+
+
+    // CONTROLADOR DE FRAMES Y CONTADOR :
+
+
     // 2. Dejando caer comida  -  objetos
 
     
 
     lanzandoComida = () => {
-        if(this.comidaArr.length === 0 ) {
+        if((this.comidaArr.length === 0 || this.frames%240 <= this.spawnFood) && this.hammersNow === false ) {
             let randomPosX = Math.random() * (640)  // intentando encontrar la falla de  por que los dos objetos(comidas) desaparecen a la vez.
             let randomPosX2 =  Math.random() * (640)
 
@@ -116,7 +159,7 @@ class Game {
             let randomSpeed3 = speeds[Math.floor(Math.random()*(5))]
 
 
-        if (this.objetoArr.length === 0 && this.contador <=10) {
+        if ((this.objetoArr.length === 0 || this.frames%300 <= this.spawnHammersKulls) && this.contador % 2 === 0 && this.contador !== 0) {
 
            let objeto1 = new Objeto(randomPosX1, randomSpeed1, 0)
            this.objetoArr.push(objeto1)
@@ -124,7 +167,7 @@ class Game {
            let objeto2 = new Objeto(randomPosX2, randomSpeed2, 0)
            this.objetoArr.push(objeto2)
 
-        } else if(this.contador > 10 && this.hammerArr.length ===0 ){
+        } else if(this.hammersNow === true &&  (this.hammerArr.length ===0 || this.frames%120 <= this.spawnHammersKulls)){
 
            let hammer1 = new Objeto(randomPosX1, randomSpeed1, 1)
            this.hammerArr.push(hammer1)
@@ -151,22 +194,22 @@ class Game {
         this.comidaArr.forEach((cadaComida, index) => {
            
             if (
-                this.personaje1.x <cadaComida.x +cadaComida.w &&
-                this.personaje1.x + this.personaje1.w >cadaComida.x &&
+                this.personaje1.x <cadaComida.x0 +cadaComida.w &&
+                this.personaje1.x + this.personaje1.w >cadaComida.x0 &&
                 this.personaje1.y <cadaComida.y +cadaComida.h &&
                 this.personaje1.h + this.personaje1.y >cadaComida.y && this.barW <400
               ) {
-                // Collision detected!
-               // console.log("personaje1 obtuvo comida")
+                
+            
                 this.comidaArr.splice(index,1) 
                 
-                this.contador ++
-                this.score1 = new Score(this.personaje1.x, this.personaje1.y, 0)
+                
+                this.score1 = new Score(this.personaje1.x, this.personaje1.y, 0, 40)
                 this.scoreArr.push(this.score1)  
 
               } else if(
-                this.personaje1.x <cadaComida.x +cadaComida.w &&
-                this.personaje1.x + this.personaje1.w >cadaComida.x &&
+                this.personaje1.x <cadaComida.x0 +cadaComida.w &&
+                this.personaje1.x + this.personaje1.w >cadaComida.x0 &&
                 this.personaje1.y <cadaComida.y +cadaComida.h &&
                 this.personaje1.h + this.personaje1.y >cadaComida.y){
 
@@ -183,37 +226,39 @@ class Game {
         this.objetoArr.forEach((cadaObjeto, index) => {
 
            if (
-                this.personaje1.x <cadaObjeto.x +cadaObjeto.w &&
-                this.personaje1.x + this.personaje1.w >cadaObjeto.x &&
+                this.personaje1.x <cadaObjeto.x0 +cadaObjeto.w &&
+                this.personaje1.x + this.personaje1.w >cadaObjeto.x0 &&
                 this.personaje1.y <cadaObjeto.y +cadaObjeto.h &&
                 this.personaje1.h + this.personaje1.y >cadaObjeto.y 
               ) {
-                // Collision detected!
+        
             
                 this.objetoArr.splice(index,1)
-                this.barW -= 40
-                this.score2 = new Score(this.personaje1.x, this.personaje1.y, 1)
+                
+                this.score2 = new Score(this.personaje1.x, this.personaje1.y, 1, -40)
                 this.scoreArr.push(this.score2)
-                // activar el fin del juego
+
               }  
             
               
         })
 
-        this.gameOver()
+      //  this.gameOver()
     }
 
     hammerHitting = () => {
         this.hammerArr.forEach((cadaHammer, index) => {
                 if(
-                    cadaHammer.x <this.personaje1.x +this.personaje1.w &&
-                    cadaHammer.x + cadaHammer.w >this.personaje1.x &&
+                    cadaHammer.x0  <this.personaje1.x +this.personaje1.w &&
+                    cadaHammer.x0 + cadaHammer.w >this.personaje1.x &&
                     cadaHammer.y <this.personaje1.y +this.personaje1.h &&
                     cadaHammer.h + cadaHammer.y >this.personaje1.y
                   ) { 
 
                    this.hammerArr.splice(index,1)
                    this.personaje1.character.src = this.personaje1.charArr[1]
+                   this.score3 = new Score(this.personaje1.x, this.personaje1.y, 2, 0)
+                   this.stunnedArr.push(this.score3)
                    this.hammerHit = true;
                    this.hammerHitTimer()
                    }
@@ -226,13 +271,23 @@ class Game {
             if(this.igorX <cadaScore.x +cadaScore.w &&
                this.igorX + this.igorW >cadaScore.x &&
                this.igorY <cadaScore.y +cadaScore.h &&
-               this.igorH + this.igorY >cadaScore.y) {
+               this.igorH + this.igorY >cadaScore.y && this.barW<400) {
 
                     this.scoreArr.splice(index,1)
-                    this.barW += 40
-               } 
+                    this.barW += cadaScore.value
+                    
+               } else if (this.igorX <cadaScore.x +cadaScore.w &&
+               this.igorX + this.igorW >cadaScore.x &&
+               this.igorY <cadaScore.y +cadaScore.h &&
+               this.igorH + this.igorY >cadaScore.y ){
 
+                    this.scoreArr.splice(index,1)
+                
+               }
         })
+
+      this.gameOver()
+        
     }
 
     quitandoComida = () => {
@@ -284,6 +339,7 @@ class Game {
 
     gameLoop = () => {
         
+        this.frames ++
         
         // 1. limpieza - borrado del canvas
 
@@ -309,12 +365,14 @@ class Game {
         this.personaje1.gravityCharacter()
         this.hungerBar()
         this.scoreArr.forEach((eachScore) =>{
-            if(eachScore.x > 40 || eachScore.y + eachScore.h > 40){ 
+            if((eachScore.x > 40 || eachScore.y + eachScore.h > 40) && eachScore.value !== 0 ){ 
             eachScore.scoreMotion()
             }
         })
         
-
+        // controlador 
+        this.contadorFrames()
+        this.hammersFrenzyNow()
       //  this.quitandoComida()
         this.quitandoComida()
         this.quitandoObjetos()
@@ -345,7 +403,16 @@ class Game {
 
         this.scoreArr.forEach((eachScore)=> {
             eachScore.drawScore()
+        
         })
+        this.stunnedArr.forEach((eachStun)=>{ 
+            eachStun.drawScore()
+            
+          if(this.frames % 120 ===0)
+           {   this.stunnedArr.splice(eachStun, 1) }
+        
+        
+    })
         
         
         // 4. Recursion y control
