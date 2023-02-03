@@ -58,17 +58,17 @@ class Game {
 
     contadorFrames = () => {
 
-        if(this.frames%21600 ===0){
+        if(this.frames%9000 ===0){
             this.spawnHammersKulls ++
             this.contador ++
             this.hunger += 0.05
             
         }
-        if (this.frames%900 === 0){
+        if (this.frames%600 === 0){
             this.contador ++
         } 
 
-        if(this.frames%30000===0){
+        if(this.frames%18000===0){
             this.spawnFood ++
             
         }     
@@ -170,6 +170,9 @@ class Game {
 
            let objeto2 = new Objeto(randomPosX2, randomSpeed2, 0)
            this.objetoArr.push(objeto2)
+
+           let objeto3 = new Objeto(randomPosX3, randomSpeed3, 0)
+           this.objetoArr.push(objeto3)
 
         } else if(this.hammersNow === true &&  (this.hammerArr.length ===0 || this.frames%120 <= this.spawnHammersKulls)){
 

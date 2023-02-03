@@ -23,7 +23,7 @@ class Character {
         // 1. Dibujar al Personaje
     drawTeleport = () =>{
         ctx.drawImage(this.teleport, this.x, this.y, this.w, this.h)
-        console.log("lalalalalla")
+    
     }
     
     drawCharacter = () => {
