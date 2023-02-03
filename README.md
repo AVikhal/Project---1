@@ -107,4 +107,4 @@ Hungry Igor is a game inspired in dogs appetite. The game starts with the player
 # Extra Links
 
 ### Slides
-[Link](www.your-url-here.com)
+[Link] https://avikhal.github.io/Project---1/
