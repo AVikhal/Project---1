@@ -336,6 +336,11 @@ class Game {
             console.log("gameOVER!!!")
 
             failedGameContainer.style.display = "flex"
+            
+            btnReStart.innerText = `
+                ONLY ${this.contador}?
+                IGOR IS STILL STARVING!
+                `
 
             
         }
